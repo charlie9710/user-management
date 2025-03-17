@@ -21,12 +21,11 @@ public class UserImplService implements IUserService {
     @Transactional
     @Override
     public User save(UserDto userDto) {
-        User user = User.builder().
-                    idUser(userDto.getIdUser())
+        User user = User.builder()
+                    .idUser(userDto.getIdUser())
                     .name(userDto.getName())
                     .lastName(userDto.getLastName())
                     .email(userDto.getEmail())
-                    .registerDate(userDto.getRegisterDate())
                     .build();     
         return userDao.save(user);
     }

@@ -1,5 +1,6 @@
 package com.ce.um.gestion_usuarios.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -49,12 +50,13 @@ public class UserController {
         } catch (DataAccessException e) {
             return new ResponseEntity<>(ResponseMessage.builder()
                                         .message(e.getMessage())
-                                        .object(null), HttpStatus.METHOD_NOT_ALLOWED);
+                                        .object(null)
+                                        .build(), HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<?> update(UserDto userDto, @PathVariable Integer id){
+    public ResponseEntity<?> update(@RequestBody UserDto userDto, @PathVariable Integer id){
 
         User userUpdate = null;
         try {
@@ -62,6 +64,7 @@ public class UserController {
             User findUser = userService.findById(id);
 
             if (findUser!=null){
+                System.out.println("Se encontro usuario");
                 userDto.setIdUser(id);
                 userUpdate = userService.save(userDto);
                 userDto = UserDto.builder()
@@ -79,13 +82,15 @@ public class UserController {
             }else{
                 return new ResponseEntity<>(ResponseMessage.builder()
                                         .message("The user does not exist")
-                                        .object(null), HttpStatus.NOT_FOUND);
+                                        .object(null)
+                                        .build(), HttpStatus.NOT_FOUND);
             }
 
         } catch (DataAccessException e) {
             return new ResponseEntity<>(ResponseMessage.builder()
                                         .message(e.getMessage())
-                                        .object(null), HttpStatus.METHOD_NOT_ALLOWED);
+                                        .object(null)
+                                        .build(), HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
     
@@ -105,16 +110,19 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping(value = "/user/{id}")
     public ResponseEntity<?> showById(@PathVariable Integer id){
         User user = userService.findById(id);
 
         if (user == null ){
             return new ResponseEntity<>(ResponseMessage.builder()
                                         .message("User not found")
-                                        .object(null), HttpStatus.METHOD_NOT_ALLOWED);
+                                        .object(null)
+                                        .build()
+                                        , HttpStatus.METHOD_NOT_ALLOWED);
 
         }
+        System.out.println("Se encontro usuario");
         UserDto userDto = UserDto.builder()
                     .idUser(user.getIdUser())
                     .name(user.getName())
@@ -124,7 +132,8 @@ public class UserController {
                     .build();
         return new ResponseEntity<>(ResponseMessage.builder()
                                     .message("User obtained")
-                                    .object(userDto), HttpStatus.OK);
+                                    .object(userDto)
+                                    .build(), HttpStatus.OK);
 
     }
 

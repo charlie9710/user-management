@@ -23,12 +23,14 @@ public class SecurityConfig {
         http
         .authorizeHttpRequests(customizeRequests -> {
             customizeRequests
-                    .requestMatchers(HttpMethod.GET,"/api/vi/*").permitAll()
-                    .requestMatchers(HttpMethod.POST,"/api/vi/*").hasRole("ADMIN")
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/api/v1/*").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/api/v1/*").hasRole("ADMIN")
                     .anyRequest()
                     .authenticated();
             }
             )
+            .headers(headers -> headers.frameOptions().sameOrigin())
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(Customizer.withDefaults());
@@ -44,10 +46,10 @@ public class SecurityConfig {
                             .build();
 
         UserDetails customer = User.builder()
-        .username("customer")
-        .password(passwordEncoder().encode("customer123"))
-        .roles("CUSTOMER")
-        .build();
+                            .username("customer")
+                            .password(passwordEncoder().encode("customer123"))
+                            .roles("CUSTOMER")
+                            .build();
 
         return new InMemoryUserDetailsManager(admin, customer);
     }

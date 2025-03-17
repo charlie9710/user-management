@@ -1,6 +1,8 @@
 package com.ce.um.gestion_usuarios.model.dto;
 
-import java.sql.Date;
+
+
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +15,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-public class UserDto {
+public class UserDto implements Serializable{
 
     private Integer idUser;
     private String name;
     private String lastName;
     private String email;
-    private Date registerDate;
 
 }
