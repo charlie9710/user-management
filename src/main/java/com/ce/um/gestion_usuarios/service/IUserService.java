@@ -1,15 +1,15 @@
 package com.ce.um.gestion_usuarios.service;
 
 import com.ce.um.gestion_usuarios.model.dto.UserDto;
-import com.ce.um.gestion_usuarios.model.entity.User;
+import com.ce.um.gestion_usuarios.model.entity.UserEntity;
 
 public interface IUserService {
 
-    User save(UserDto user);
+    UserEntity save(UserDto user);
 
-    User findById(Integer id);
+    UserEntity findById(Integer id);
 
-    void delete(User user);
+    void delete(UserEntity user);
 
 
 }

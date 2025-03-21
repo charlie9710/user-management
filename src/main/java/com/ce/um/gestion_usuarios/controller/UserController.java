@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ce.um.gestion_usuarios.model.dto.UserDto;
-import com.ce.um.gestion_usuarios.model.entity.User;
+import com.ce.um.gestion_usuarios.model.entity.UserEntity;
 import com.ce.um.gestion_usuarios.model.payload.ResponseMessage;
 import com.ce.um.gestion_usuarios.service.IUserService;
 
@@ -32,11 +32,12 @@ public class UserController {
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestBody UserDto userDto){
-        User userSave = null;
+        UserEntity userSave = null;
         try {
             userSave = userService.save(userDto);
             userDto = UserDto.builder()
                         .idUser(userSave.getIdUser())
+                        .username(userSave.getUsername())
                         .name(userSave.getName())
                         .lastName(userSave.getLastName())
                         .email(userSave.getEmail())
@@ -58,17 +59,17 @@ public class UserController {
     @PutMapping("/user/{id}")
     public ResponseEntity<?> update(@RequestBody UserDto userDto, @PathVariable Integer id){
 
-        User userUpdate = null;
+        UserEntity userUpdate = null;
         try {
 
-            User findUser = userService.findById(id);
+            UserEntity findUser = userService.findById(id);
 
             if (findUser!=null){
-                System.out.println("Se encontro usuario");
                 userDto.setIdUser(id);
                 userUpdate = userService.save(userDto);
                 userDto = UserDto.builder()
                         .idUser(userUpdate.getIdUser())
+                        .username(userUpdate.getUsername())
                         .name(userUpdate.getName())
                         .lastName(userUpdate.getLastName())
                         .email(userUpdate.getEmail())
@@ -97,7 +98,7 @@ public class UserController {
     @DeleteMapping("user/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id){
         try {
-            User userDelete = userService.findById(id);
+            UserEntity userDelete = userService.findById(id);
             userService.delete(userDelete);
             return new ResponseEntity<>(userDelete, HttpStatus.NO_CONTENT);
         } catch (DataAccessException e) {
@@ -110,9 +111,11 @@ public class UserController {
         }
     }
 
+
+    @Secured("ADMIN")
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<?> showById(@PathVariable Integer id){
-        User user = userService.findById(id);
+        UserEntity user = userService.findById(id);
 
         if (user == null ){
             return new ResponseEntity<>(ResponseMessage.builder()
@@ -122,9 +125,9 @@ public class UserController {
                                         , HttpStatus.METHOD_NOT_ALLOWED);
 
         }
-        System.out.println("Se encontro usuario");
         UserDto userDto = UserDto.builder()
                     .idUser(user.getIdUser())
+                    .username(user.getUsername())
                     .name(user.getName())
                     .lastName(user.getLastName())
                     .email(user.getEmail())

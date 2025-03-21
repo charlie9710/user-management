@@ -3,6 +3,7 @@ package com.ce.um.gestion_usuarios.model.dto;
 
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +19,10 @@ import lombok.ToString;
 public class UserDto implements Serializable{
 
     private Integer idUser;
+    private String username;
     private String name;
     private String lastName;
     private String email;
+    private LocalDateTime registerDate;
 
 }

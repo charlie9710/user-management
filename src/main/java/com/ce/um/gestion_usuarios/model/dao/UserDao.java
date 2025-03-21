@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.ce.um.gestion_usuarios.model.entity.User;
+import com.ce.um.gestion_usuarios.model.entity.UserEntity;
 
-public interface UserDao  extends CrudRepository<User, Integer>{
+public interface UserDao  extends CrudRepository<UserEntity, Integer>{
 
-    Optional<User> findByUsername(String username);
+    Optional<UserEntity> findByUsername(String username);
 
 }
